@@ -6,25 +6,29 @@ import csv
 with open('texts.csv', 'r') as f:
     reader = csv.reader(f)
     texts = list(reader)
-    non_telemarketers = set()
+    all_phone_numbers = set()
+    send_text_numbers = set()
+    receive_text_numbers = set()
     for record in texts:
-        non_telemarketers.update([record[0],record[1]])
+        all_phone_numbers.update([record[0],record[1]])
+        send_text_numbers.add(record[0])
+        receive_text_numbers.add(record[1])
    
-
-
 with open('calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
-    outgoing = set()
+    outgoing_calls = set()
+    receiving_calls = set()
     telemarketers = set()
    
     for record in calls:
-        non_telemarketers.add(record[1])
-        outgoing.add(record[0])
-    telemarketers = non_telemarketers - outgoing
-    sortes_telemarketers = sorted(telemarketers)
+        all_phone_numbers.update([record[0],record[1]])
+        outgoing_calls.add(record[0])
+        receiving_calls.add(record[1])
+    telemarketers = all_phone_numbers - send_text_numbers - receive_text_numbers - receiving_calls
+    sorted_telemarketers = sorted(telemarketers)
     print("These numbers could be telemarketers: ")
-    print(*sortes_telemarketers, sep='\n')
+    print(*sorted_telemarketers, sep='\n')
 
 
 

@@ -1,0 +1,184 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red25\green60\blue255;\red25\green60\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c12594\c35385\c100000;\cssrgb\c12594\c35385\c100000;}
+\margl1440\margr1440\vieww10800\viewh16400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs36 \cf0 Step 3 - Calculate Big O\
+
+\f1\b0 \ul Task 0 \ulnone \
+with open('texts.csv', 'r') as f:\
+O(1)   open the file\
+\
+ reader = csv.reader(f)\
+O(n)    :n is the string in the file\
+\
+    texts = list(reader)\
+O(n)     :n is the string to store in a list \
+\
+    listText = list(texts[0])\
+O(1)       store the first record of the list as list\
+\
+    print(f"First record of textssss, \{listText[0]\} texts \{listText[1]\} at time \{listText[2]\}")\
+O(1)       print the first record of the list \
+\
+with open('calls.csv', 'r') as f:\
+O(1)   open the file\
+\
+    reader = csv.reader(f) \
+O(n)    :n is the string in the file\
+\
+calls = list(reader)\
+O(n)     :n is the string to store in a list \
+\
+    listCalls = list(calls.pop())\
+O(1)   store last record in a list\
+\
+    print(f"Last record of calls,  \{listCalls[0]\} calls \{listCalls[1]\} at time \{listCalls[2]\} lasting \{listCalls[3]\} seconds")\
+O(1)       print the last record of the list \
+\
+\cf2 f(n) = O(1+n+n+1+1   + 1+n+n+1+1) = O(4n+6) ~= O(n)\
+\cf0 \
+\
+
+\f0\b \ul Task 1
+\f1\b0 \ulnone \
+with open('texts.csv', 'r') as f:\
+O(1)   open the file\
+\
+ reader = csv.reader(f)\
+O(n)    :n is the string in the file\
+\
+    texts = list(reader)\
+O(n)     :n is the string to store in a list \
+ for phone in texts:\
+       all_phone_nums.update([phone[0], phone[1]])\
+O(n + m)    n is outgoing number and m is receiver number\
+with open('calls.csv', 'r') as f:\
+O(1)   open the file\
+\
+    reader = csv.reader(f) \
+O(n)    :n is the string in the file\
+\
+calls = list(reader)\
+O(n)     :n is the string to store in a list \
+ for phone in calls:\
+        all_phone_nums.update([phone[0], phone[1]])\
+O(n + m)    n is outgoing number and m is receiver number\
+    print(f"There are \{len(all_phone_nums)\} different telephone numbers in the records. ")\
+O(n)       n: count of records to print \
+\
+\cf2 f(n) = O(1+n+n+n+m+1+n+n+n+m+n) = O(6n+2m+2) ~=O(n)\
+\cf0 \
+
+\f0\b \ul Task 2\
+
+\f1\b0 \ulnone with open('calls.csv', 'r') as f:\
+    reader = csv.reader(f)\
+    calls = list(reader)\
+O(1+n+n) = O(2n+1) explained before\
+  for record in calls:\
+        if record[0] not in phone_nums:\
+           phone_nums[record[0]] = int(record[3])\
+        else:\
+           phone_nums[record[0]] += int(record[3])\
+O(n)   n is phone numbers\
+\
+ if record[1] not in phone_nums:\
+           phone_nums[record[1]] = int(record[3])\
+        else:\
+           phone_nums[record[1]] += int(record[3])\
+O(n)   n is phone numbers\
+\
+longest_caller = max(phone_nums, key=phone_nums.get)\
+O(n)   n is phone numbers\
+    longest_duration = max(phone_nums.values())\
+O(n)   n is phone numbers\
+\
+\cf2 f(n)=   O(2n+1+n+n+n+n) = O(6n+1) ~= O(n)\
+\cf0 \
+
+\f0\b \ul Task 3\
+
+\f1\b0 \ulnone with open('calls.csv', 'r') as f:\
+    reader = csv.reader(f)\
+    calls = list(reader)\
+O(1+n+n) = O(2n+1) explained before\
+ for record in calls:\
+      all_call_nums.update([record[0], record[1]])\
+      if record[0].startswith("(080)"):\
+        outgoing_080.add(record[0])\
+O(2n) = n is count of calls\
+if record[1].startswith("("):\
+          full_fixed_line=record[1].split(")")\
+          code_fixed_line = full_fixed_line[0] + ")"\
+          all_receiver.add(code_fixed_line)\
+O(4)\
+ if record[1].find(' ') != -1:\
+          mobiles = record[1][slice(4)]\
+          all_receiver.add(mobiles)\
+O(3)\
+ if record[1].startswith("140"):\
+O(1)\
+           telemarketer = record[1][slice(3)]\
+O(3)\
+           all_receiver.add(telemarketer)\
+O(1)\
+ if record[1].startswith("(080)") and record[0].startswith("(080)"):\
+O(1)\
+          receiver_080.update([record[0],record[1]])\
+O(1) \
+sorted_all_receiver = sorted(all_receiver)\
+O(n log n)\
+print("The numbers called by people in Bangalore have codes:")\
+O(1) \
+\
+    print(*sorted_all_receiver, sep='\\n')\
+O(1) \
+\
+    precentageA = (len(outgoing_080) / len(all_call_nums)) * 100\
+O(1) \
+\
+    precentageB = (len(receiver_080) / len(all_call_nums)) * 100\
+O(1) \
+\
+    precentage = precentageA + precentageB\
+O(1) \
+\
+    precentage_decimal = format(precentage, '.2f')\
+O(1) \
+\
+    print(f"\{precentage_decimal\}% of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")\
+O(1) \
+\cf2 f(n)=  O(2n+1 + 15n + n log n + 7) = O(2n +1 + 17n + n log n + 7) = O(18n log n + 7) ~= O(n log n)\
+\cf0 \
+
+\f0\b \ul Task 4\
+
+\f1\b0 \ulnone with open('texts.csv', 'r') as f:\
+    reader = csv.reader(f)\
+    texts = list(reader)\
+O(1+n+n) = O(2n+1) explained before\
+for record in texts:\
+    all_phone_numbers.update([record[0],record[1]])\
+        send_text_numbers.add(record[0])\
+        receive_text_numbers.add(record[1])\
+O(3n) = n count of texts\
+with open('calls.csv', 'r') as f:\
+    reader = csv.reader(f)\
+    calls = list(reader)\
+O(1+n+n) = O(2n+1) explained before\
+ for record in calls:\
+        all_phone_numbers.update([record[0],record[1]])\
+        outgoing_calls.add(record[0])\
+        receiving_calls.add(record[1])\
+O(3m) = m count of calls\
+telemarketers = all_phone_numbers - send_text_numbers - receive_text_numbers - receiving_calls\
+O(1)\
+    sortes_telemarketers = sorted(telemarketers)\
+O(n log n)\
+print("These numbers could be telemarketers: ")\
+print(*sortes_telemarketers, sep='\\n')\
+O(2)\
+\cf3 f(n) = O(2n+1 + 3n + 2n+1 + 3m + 1 + n log n +2) = (8n log n + 3m + 4) ~= O(n log n)}
