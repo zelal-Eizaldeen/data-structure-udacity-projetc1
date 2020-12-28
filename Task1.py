@@ -4,25 +4,20 @@ import numpy as np
 with open('texts.csv', 'r') as f:
     reader = csv.reader(f)
     texts = list(reader)
-   
-    unique_phone_numbers = []
+    all_phone_nums = set()
     for phone in texts:
-        if phone[0] not in unique_phone_numbers:
-           unique_phone_numbers.append(phone[0])
-        if phone[1] not in unique_phone_numbers:
-           unique_phone_numbers.append(phone[1])
-   
-          
-   
+       all_phone_nums.update([phone[0], phone[1]])
+      
 with open('calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
     for phone in calls:
-        if phone[0] not in unique_phone_numbers:
-           unique_phone_numbers.append(phone[0])
-        if phone[1] not in unique_phone_numbers:
-           unique_phone_numbers.append(phone[1])
-    print(f"There are {len(unique_phone_numbers)} different telephone numbers in the records. ")
+        all_phone_nums.update([phone[0], phone[1]])
+      #   if phone[0] not in unique_phone_numbers:
+      #      unique_phone_numbers.append(phone[0])
+      #   if phone[1] not in unique_phone_numbers:
+      #      unique_phone_numbers.append(phone[1])
+    print(f"There are {len(all_phone_nums)} different telephone numbers in the records. ")
   
     
 

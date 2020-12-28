@@ -3,20 +3,28 @@ Read file into texts and calls.
 It's ok if you don't understand how to read files.
 """
 import csv
+with open('texts.csv', 'r') as f:
+    reader = csv.reader(f)
+    texts = list(reader)
+    non_telemarketers = set()
+    for record in texts:
+        non_telemarketers.update([record[0],record[1]])
+   
 
 
 with open('calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
-    telemarketers = []
-    precentage_codes = []
+    outgoing = set()
+    telemarketers = set()
+   
     for record in calls:
-        if record[0] not in telemarketers:
-           if record[0].find('140') == 0:
-               telemarketers.append(record[0])
-    telemarketers.sort()
+        non_telemarketers.add(record[1])
+        outgoing.add(record[0])
+    telemarketers = non_telemarketers - outgoing
+    sortes_telemarketers = sorted(telemarketers)
     print("These numbers could be telemarketers: ")
-    print(*telemarketers, sep='\n')
+    print(*sortes_telemarketers, sep='\n')
 
 
 

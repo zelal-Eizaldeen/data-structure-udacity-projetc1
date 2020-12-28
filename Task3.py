@@ -7,43 +7,38 @@ import csv
 with open('calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
-    all_phone_nums = []
-    area_codes = []
-    precentage_codes = []
+    all_receiver = set()
+    receiver_080 = set()
+    outgoing_080 = set()
+    all_call_nums = set()
+   
     for record in calls:
-        all_phone_nums.extend([record[0], record[1]])
-       
-        if record[0] not in area_codes:
-           if record[0].find('(080)') == 0 or record[0].find('7') == 0 or record[0].find('8') == 0 or record[0].find('9') == 0:
-               area_codes.append(record[0])
-        if record[1] not in area_codes:
-            if record[1].find('(080)') == 0 or record[1].find('7') == 0 or record[1].find('8') == 0 or record[1].find('9') == 0:
-                area_codes.append(record[1])
-        if record[0].find('(080)') == 0 and record[1].find('(080)') == 0:
-            precentage_codes.extend([record[0], record[1]])
-            
-    area_codes.sort()
+      all_call_nums.update([record[0], record[1]])
+      if record[0].startswith("(080)"):
+        outgoing_080.add(record[0])
+        if record[1].startswith("("):
+          full_fixed_line=record[1].split(")")
+          code_fixed_line = full_fixed_line[0] + ")"
+          all_receiver.add(code_fixed_line)
+        if record[1].find(' ') != -1:
+          mobiles = record[1][slice(4)]
+          all_receiver.add(mobiles)
+        if record[1].startswith("140"):
+           telemarketer = record[1][slice(3)]
+           all_receiver.add(telemarketer)
+        if record[1].startswith("(080)") and record[0].startswith("(080)"):
+          receiver_080.update([record[0],record[1]])
+              
+    sorted_all_receiver = sorted(all_receiver)
     print("The numbers called by people in Bangalore have codes:")
-    print(*area_codes, sep='\n')
-    precentage = (len(precentage_codes) / len(all_phone_nums)) * 100
+    print(*sorted_all_receiver, sep='\n')
+
+    precentageA = (len(outgoing_080) / len(all_call_nums)) * 100
+    precentageB = (len(receiver_080) / len(all_call_nums)) * 100
+    precentage = precentageA + precentageB
     precentage_decimal = format(precentage, '.2f')
-
     print(f"{precentage_decimal}% of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")
-    
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
+      
 """
 TASK 3:
 (080) is the area code for fixed line telephones in Bangalore.

@@ -3,8 +3,6 @@ Read file into texts and calls.
 It's ok if you don't understand how to read files
 """
 import csv
-import numpy as np
-
 
 with open('calls.csv', 'r') as f:
     reader = csv.reader(f)
